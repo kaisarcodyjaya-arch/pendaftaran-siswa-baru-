@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aplikasi Pendaftaran Siswa</title>
+<style>
+:root{--navy:#17324d;--blue:#2463eb;--bg:#f4f7fb;--line:#dbe3ee;--muted:#64748b;--green:#0f766e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#172b4d}
+header{background:linear-gradient(120deg,#17324d,#2463eb);color:white;padding:28px 18px}
+.wrap{max-width:1050px;margin:auto;padding:0 16px}header h1{margin:0;font-size:clamp(24px,4vw,34px)}header p{margin:6px 0 0;color:#e3edff}
+main{padding:24px 0 40px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.stat,.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 4px 16px #17324d0a}
+.stat span{display:block;color:var(--muted);font-size:13px}.stat strong{font-size:26px;color:var(--navy)}
+.panel{margin-bottom:18px}.panel h2{font-size:19px;margin:0 0 16px}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+label{display:block;font-weight:600;font-size:13px;margin-bottom:6px}input,select,textarea{width:100%;padding:11px 12px;border:1px solid #cbd5e1;border-radius:9px;background:white;color:#172b4d;font:inherit}input:focus,select:focus,textarea:focus{outline:2px solid #bfdbfe;border-color:var(--blue)}.full{grid-column:1/-1}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn{border:0;border-radius:9px;padding:11px 15px;font-weight:700;cursor:pointer}.primary{background:var(--blue);color:white}.secondary{background:#e8eef7;color:var(--navy)}.danger{background:#fee2e2;color:#991b1b}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.toolbar input{flex:1;min-width:180px}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px}th,td{text-align:left;padding:11px 10px;border-bottom:1px solid #e7edf5;font-size:13px}th{color:var(--muted);font-weight:700;background:#f8fafc}.empty{text-align:center;padding:24px;color:var(--muted)}.notice{font-size:12px;color:var(--muted);margin-top:12px}.status{color:var(--green);font-weight:700}.smallbtn{padding:6px 9px;font-size:12px;border-radius:7px}.toast{display:none;margin-bottom:14px;padding:10px 12px;background:#dcfce7;color:#166534;border-radius:9px}
+@media(max-width:640px){.stats{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.panel{padding:14px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>🎓 Pendaftaran Siswa Baru</h1><p>Formulir pendaftaran dan pengelolaan data calon siswa</p></div></header>
+<main class="wrap">
+<div class="stats">
+  <div class="stat"><span>Total pendaftar</span><strong id="total">0</strong></div>
+  <div class="stat"><span>Laki-laki</span><strong id="male">0</strong></div>
+  <div class="stat"><span>Perempuan</span><strong id="female">0</strong></div>
+</div>
+<div id="toast" class="toast" role="status"></div>
+<section class="panel">
+<h2 id="formTitle">Formulir Data Siswa</h2>
+<form id="studentForm">
+<input type="hidden" id="editId">
+<div class="formgrid">
+<div><label for="nama">Nama lengkap *</label><input id="nama" required maxlength="100" placeholder="Nama sesuai dokumen"></div>
+<div><label for="nisn">NISN (jika ada)</label><input id="nisn" inputmode="numeric" maxlength="20" placeholder="Nomor induk siswa nasional"></div>
+<div><label for="lahir">Tempat lahir *</label><input id="lahir" required maxlength="80" placeholder="Kota tempat lahir"></div>
+<div><label for="tanggal">Tanggal lahir *</label><input id="tanggal" type="date" required></div>
+<div><label for="jk">Jenis kelamin *</label><select id="jk" required><option value="">Pilih jenis kelamin</option><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select></div>
+<div><label for="agama">Agama</label><select id="agama"><option value="">Pilih (opsional)</option><option>Islam</option><option>Kristen</option><option>Katolik</option><option>Hindu</option><option>Buddha</option><option>Konghucu</option><option>Lainnya</option></select></div>
+<div><label for="asal">Asal sekolah *</label><input id="asal" required maxlength="120" placeholder="Sekolah sebelumnya"></div>
+<div><label for="kelas">Daftar ke kelas *</label><select id="kelas" required><option value="">Pilih kelas</option><option>Kelas 1</option><option>Kelas 2</option><option>Kelas 3</option><option>Kelas 4</option><option>Kelas 5</option><option>Kelas 6</option><option>Kelas 7</option><option>Kelas 8</option><option>Kelas 9</option><option>Kelas 10</option><option>Kelas 11</option><option>Kelas 12</option></select></div>
+<div><label for="ortu">Nama orang tua/wali *</label><input id="ortu" required maxlength="100" placeholder="Nama orang tua atau wali"></div>
+<div><label for="telepon">Nomor HP orang tua/wali *</label><input id="telepon" required type="tel" maxlength="25" placeholder="Contoh: 081234567890"></div>
+<div class="full"><label for="alamat">Alamat lengkap *</label><textarea id="alamat" required rows="3" maxlength="500" placeholder="Jalan, RT/RW, kelurahan, kecamatan, kota/kabupaten"></textarea></div>
+</div>
+<div class="actions"><button class="btn primary" type="submit" id="saveBtn">Simpan pendaftaran</button><button class="btn secondary" type="reset" id="resetBtn">Kosongkan formulir</button></div>
+<p class="notice">* Wajib diisi. Data disimpan di penyimpanan browser pada perangkat ini, bukan ke server sekolah.</p>
+</form>
+</section>
+<section class="panel">
+<h2>Data Pendaftar</h2>
+<div class="toolbar"><input id="search" placeholder="Cari nama, NISN, atau asal sekolah..." aria-label="Cari pendaftar"><button class="btn secondary" id="exportBtn" type="button">Ekspor CSV</button><button class="btn danger" id="clearBtn" type="button">Hapus semua data</button></div>
+<div class="tablewrap"><table><thead><tr><th>No.</th><th>Nama siswa</th><th>NISN</th><th>Jenis kelamin</th><th>Kelas</th><th>Asal sekolah</th><th>Aksi</th></tr></thead><tbody id="rows"></tbody></table><div id="empty" class="empty">Belum ada data pendaftar. Isi formulir untuk memulai.</div></div>
+</section>
+</main>
+<script>
+const KEY='pendaftaranSiswa_v1';
+const $=id=>document.getElementById(id);
+let students=[];
+try{students=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){students=[]}
+const fields=['nama','nisn','lahir','tanggal','jk','agama','asal','kelas','ortu','telepon','alamat'];
+function persist(){localStorage.setItem(KEY,JSON.stringify(students));render()}
+function toast(msg){$('toast').textContent=msg;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2800)}
+function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){
+ const q=$('search').value.trim().toLowerCase();
+ const shown=students.filter(s=>[s.nama,s.nisn,s.asal].some(v=>String(v||'').toLowerCase().includes(q)));
+ $('total').textContent=students.length;
+ $('male').textContent=students.filter(s=>s.jk==='Laki-laki').length;
+ $('female').textContent=students.filter(s=>s.jk==='Perempuan').length;
+ $('rows').innerHTML=shown.map((s,i)=>`<tr><td>${i+1}</td><td><strong>${safe(s.nama)}</strong></td><td>${safe(s.nisn||'—')}</td><td>${safe(s.jk)}</td><td>${safe(s.kelas)}</td><td>${safe(s.asal)}</td><td><button class="btn secondary smallbtn" onclick="editStudent('${s.id}')">Edit</button> <button class="btn danger smallbtn" onclick="deleteStudent('${s.id}')">Hapus</button></td></tr>`).join('');
+ $('empty').style.display=shown.length?'none':'block';
+ $('empty').textContent=students.length?'Tidak ada data yang cocok dengan pencarian.':'Belum ada data pendaftar. Isi formulir untuk memulai.';
+}
+$('studentForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const obj={};fields.forEach(f=>obj[f]=$(f).value.trim());
+ if(!/^[0-9+\-\s()]{8,25}$/.test(obj.telepon)){toast('Periksa kembali nomor HP.');$('telepon').focus();return}
+ const id=$('editId').value;
+ if(id){students=students.map(s=>s.id===id?{...s,...obj}:s);toast('Data siswa berhasil diperbarui.')}
+ else{obj.id=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random());obj.createdAt=new Date().toISOString();students.unshift(obj);toast('Pendaftaran siswa berhasil disimpan.')}
+ persist();resetForm();
+});
+function resetForm(){$('studentForm').reset();$('editId').value='';$('formTitle').textContent='Formulir Data Siswa';$('saveBtn').textContent='Simpan pendaftaran'}
+$('resetBtn').addEventListener('click',()=>setTimeout(resetForm,0));
+window.editStudent=id=>{const s=students.find(x=>x.id===id);if(!s)return;fields.forEach(f=>$(f).value=s[f]||'');$('editId').value=id;$('formTitle').textContent='Edit Data Siswa';$('saveBtn').textContent='Simpan perubahan';window.scrollTo({top:0,behavior:'smooth'})};
+window.deleteStudent=id=>{const s=students.find(x=>x.id===id);if(s&&confirm(`Hapus data pendaftar ${s.nama}?`)){students=students.filter(x=>x.id!==id);persist();toast('Data berhasil dihapus.')}};
+$('search').addEventListener('input',render);
+$('exportBtn').addEventListener('click',()=>{
+ if(!students.length){toast('Belum ada data untuk diekspor.');return}
+ const headers=['Nama lengkap','NISN','Tempat lahir','Tanggal lahir','Jenis kelamin','Agama','Asal sekolah','Kelas','Orang tua/wali','Nomor HP','Alamat'];
+ const keys=['nama','nisn','lahir','tanggal','jk','agama','asal','kelas','ortu','telepon','alamat'];
+ const csv=[headers,...students.map(s=>keys.map(k=>s[k]||''))].map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+ const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='data-pendaftar-siswa.csv';a.click();URL.revokeObjectURL(a.href);toast('File CSV berhasil dibuat.');
+});
+$('clearBtn').addEventListener('click',()=>{if(students.length&&confirm('Yakin ingin menghapus SEMUA data pendaftar dari browser ini? Tindakan ini tidak bisa dibatalkan.')){students=[];persist();toast('Semua data telah dihapus.')}});
+render();
+</script>
+</body></html>
